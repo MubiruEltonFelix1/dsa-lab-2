@@ -81,7 +81,7 @@ worth knowing is that the comparators use compareToIgnoreCase. That handles uppe
 and lower case, but it still orders characters by their Unicode values, so accented 
 letters do not land where a reader of that language expects for example in nordsamiska.txt 
 the letter á should sit right after a, but it compares as greater than z, so those words 
-collect at the end of the list
+collect at the end of the list.
 
 /******************************************************************************
 ** C. Did you collaborate with any other students on this lab?
@@ -91,7 +91,7 @@ collect at the end of the list
 ******************************************************************************/
 No, we did not collaborate with any other students on this lab. 
 
-Resources used: The lab source code and its comments, the Java API pages for Array and String, 
+Resources used: The lab source code and its comments, the Java API pages for Arrays, 
 supplied dictionary files, use of AI to help us understand some of the methods, their implementations 
 and why they behave the way they do.
 
@@ -99,10 +99,19 @@ and why they behave the way they do.
 /******************************************************************************
 ** D. Describe any serious problems you encountered.                    
 ******************************************************************************/
-The main implementation issues were preserving the O(log n) for
-range lookup and ensuring that prefix comparison treats all terms beginning
-with the prefix as equal under the prefix comparator. These were addressed by
-using two boundary binary searches and sorting only the matching range.
+The first problem was the leftmost index. We wrote firstIndexOf like the ordinary search
+from the notes, returning as soon as it found something equal. For whole words it
+looked fine, because cities.txt has no repeated words. It broke the moment we used
+the prefix comparator, where a whole row of terms compares equal, so the index we
+got back was from somewhere in the middle of that row. allMatches then copied from
+there to the end and quietly dropped everything before it. Three equal words and a
+print statement is what finally showed it.
+
+The second was speed. Our allMatches sorted the whole dictionary by weight and then
+picked the matches out of it, which is n log n work on every search. In the GUI it
+made typing sluggish on gp2011.txt, since every key press runs a search. We changed
+it to copy the block of matches out first and sort only that.
+
 
 
 /******************************************************************************
