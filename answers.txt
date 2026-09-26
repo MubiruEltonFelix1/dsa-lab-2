@@ -5,18 +5,28 @@
 ** Lab 2: Autocomplete
 *******************************************************************************/
 
-Name of lab group: [...]
-Group member A:    [...]
-Group member B:    [...]
-Group member C:    [...]
+Name of lab group: CAIRO
+- Group member A: Dambya Racheal 2500603133 2025/BSE/065/PS
+- Group member B: Edou Simon Peter 2500603017 2025/BSE/066/PS 
+- Group member C: Arineitwe Rodgers 2500603020  2025/BSE/156/PS
+- Group member D: Mubiru Elton Felix 2500602997 2025/BSE/106/PS
+- Group member E: Osuta Amen Joel   2500603038   2025/BSE/152/PS
+- Group member F: Ssebugwawo Harrison 2500603122   2025/BSE/161/PS
 
 
 /******************************************************************************
 ** 1. Describe how your firstIndexOf() method in RangeBinarySearch.java
 **    finds the first index of a key that equals the search key.
 ******************************************************************************/
-
-[...]
+The method performs a binary search on the sorted array. It keeps two bounds,
+low and high, for the part of the array that may still contain the answer. At
+each iteration, it compares the middle element with the key. If the middle
+element is smaller than the key, the answer must be to the right, so low is
+moved to middle + 1. If it is larger, the answer must be to the left, so high
+is moved to middle - 1. If it is equal, middle is saved as the current best
+answer, but the search continues in the left half by setting high to middle - 1.
+Continuing left after a match is what guarantees that the returned index is the
+first equal element. If no equal element is found, result remains -1.
 
 
 /******************************************************************************
@@ -25,17 +35,28 @@ Group member C:    [...]
 **    as a function of the number of terms n and the number of matching terms m?
 ******************************************************************************/
 
-sortDictionary():  [...]
+sortDictionary():  O(n log n)
 
-[..short explanation..]
+The constructor calls Arrays.sort on the whole dictionary with
+byLexicographicOrder. Object arrays are sorted with a merge sort, which does
+about n log n comparisons in the worst case, and every one of those comparisons
+is a call into the comparator, where the two words are compared with
+compareToIgnoreCase. It runs once, when the Autocomplete object is created.
 
-allMatches():  [...]
 
-[..short explanation..]
+allMatches():  O(log n + m log m)
 
-numberOfMatches():  [...]
+Two binary searches find the first and last dictionary positions whose first
+k characters equal the prefix, using O(log n) comparisons. The matching range
+contains m terms. Copying the range takes O(m) time, and sorting those terms by
+reverse weight takes O(m log m) comparisons. The total is O(log n + m log m),
+which is at least as large as the O(m) copying cost.
 
-[..short explanation..]
+numberOfMatches():  O(log n)
+
+Two binary searches find the first and last matching positions. Each search
+uses O(log n) comparisons, and the method returns last - first + 1. It does
+not scan or sort the m matching terms, so its running time does not depend on m.
 
 /******************************************************************************
 ** Appendix: General information
@@ -43,17 +64,24 @@ numberOfMatches():  [...]
 ** A. Approximately how many hours did you spend on the assignment?
 ******************************************************************************/
 
-[..group member..]:  [..hours..]
-[..group member..]:  [..hours..]
-[..group member..]:  [..hours..]
+Dambya Racheal:  18
+Edou Simon Peter:  15
+Arineitwe Rodgers:  17
+Mubiru Elton Felix: 19
+Osuta Amen Joel: 19
+Ssebugwawo Harrison: 22
 
 
 /******************************************************************************
 ** B. Are there any known bugs / limitations?
 ******************************************************************************/
 
-[...]
-
+All three files compile with javac and every required method is done. What is 
+worth knowing is that the comparators use compareToIgnoreCase. That handles upper
+and lower case, but it still orders characters by their Unicode values, so accented 
+letters do not land where a reader of that language expects for example in nordsamiska.txt 
+the letter á should sit right after a, but it compares as greater than z, so those words 
+collect at the end of the list
 
 /******************************************************************************
 ** C. Did you collaborate with any other students on this lab?
@@ -61,15 +89,20 @@ numberOfMatches():  [...]
 **    Also include any resources (including the web) that you may
 **    may have used in creating your design.
 ******************************************************************************/
+No, we did not collaborate with any other students on this lab. 
 
-[...]
+Resources used: The lab source code and its comments, the Java API pages for Array and String, 
+supplied dictionary files, use of AI to help us understand some of the methods, their implementations 
+and why they behave the way they do.
 
 
 /******************************************************************************
 ** D. Describe any serious problems you encountered.                    
 ******************************************************************************/
-
-[...]
+The main implementation issues were preserving the O(log n) for
+range lookup and ensuring that prefix comparison treats all terms beginning
+with the prefix as equal under the prefix comparator. These were addressed by
+using two boundary binary searches and sorting only the matching range.
 
 
 /******************************************************************************
@@ -78,5 +111,8 @@ numberOfMatches():  [...]
 **    from doing the assignment, and whether you enjoyed it.                                             
 ******************************************************************************/
 
-[...]
+It looked short at first, but many of us had never written a binary search by
+hand before, so there was more scratching of heads the deeper we went. What we
+did not expect was how much of the work was in the testing rather than the
+writing. 
 
